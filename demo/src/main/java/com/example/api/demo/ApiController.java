@@ -23,6 +23,12 @@ public class ApiController {
         return dayDao.getAllDays(event_ID);
     }
 
+    // GET endpoint
+    @GetMapping("/test")
+    public String testAPI() {
+        return "Test Successful";
+    }
+
     // POST endpoint
     @PostMapping("/")
     public ResponseEntity<Object> 

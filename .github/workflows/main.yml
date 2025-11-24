@@ -34,7 +34,7 @@ jobs:
               run: sudo docker run -itd -p 8080:8080 --link mysql-app:mysql-app --name java-api ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
 
             - name: Test Docker Image
-              run: curl http://localhost:8080
+              run: curl http://localhost:8080/api/test
     deploy_job:
         needs: test_job
         runs-on: self-hosted
