@@ -31,7 +31,7 @@ jobs:
               run: sudo docker run -itd --env=MYSQL_ROOT_PASSWORD=mypassword -p 3306:3306 --name mysql-app ${{ vars.DOCKER_USERNAME }}/${{ vars.MYSQL_DB_NAME }}:latest
             
             - name: Run Docker image
-              run: sudo docker run -itd -p 8080:8080 --link mysql-app:mysql-app java-api ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
+              run: sudo docker run -itd -p 8080:8080 --link mysql-app:mysql-app --name java-api ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
 
             - name: Test Docker Image
               run: curl http://localhost:8080
