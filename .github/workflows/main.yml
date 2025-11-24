@@ -37,6 +37,11 @@ jobs:
               run: |
                   sleep 60s
                   curl http://localhost:8080/api/test
+
+            - name: Clean Docker Deployments
+              run: |
+                  sudo docker stop java-api && sudo docker rm java-api
+                  sudo docker stop mysql-app && sudo docker rm mysql-app
     deploy_job:
         needs: test_job
         runs-on: self-hosted
