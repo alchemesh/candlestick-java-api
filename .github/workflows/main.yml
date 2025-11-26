@@ -33,7 +33,7 @@ jobs:
             - name: Build Project
               run: |
                   java -version
-                  run: echo "/usr/share/apache-maven-3.9.6/bin" >> $GITHUB_PATH
+                  #run: echo "/usr/share/apache-maven-3.9.6/bin" >> $GITHUB_PATH
                   mvn clean install
                   cp target/*.jar artifacts
 
