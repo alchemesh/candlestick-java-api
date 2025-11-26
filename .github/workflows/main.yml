@@ -35,6 +35,7 @@ jobs:
                   mvn -f demo/pom.xml clean install
                   mkdir artifacts
                   cp demo/target/*.jar artifacts/
+                  ls demo/target/surefire-reports/
 
             - name: Maven Unit Test
               run: mvn -f demo/pom.xml test

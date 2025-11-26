@@ -13,21 +13,21 @@ class DayTests {
     @BeforeAll
     static void setUpTests() {
         // This method runs once before all tests in this class
-        day = Day();
+        this.day = new Day();
     }
 
 	@Test
     void testState() {
-        day.setState("Bearish");
+        this.day.setState("Bearish");
         String expected = "Bearish";
-        String actual = day.getState();
+        String actual = this.day.getState();
         assertEquals(expected, actual, "Get should be 'Bearish'");
     }
 
     @AfterAll
     static void tearDownTests() {
         // This method runs once after all tests in this class
-        day = null;
+        this.day = null;
         
     }
 
