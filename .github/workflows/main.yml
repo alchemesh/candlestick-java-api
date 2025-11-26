@@ -3,6 +3,93 @@ name: Candlestick Java API Pipeline
 on: push
 
 jobs:
+    unit_test_job:
+        name: Unit Test
+        runs-on: self-hosted
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Setup Java
+              uses: actions/setup-java@v5
+              with:
+                java-version: '21'
+                distribution: 'temurin'
+                architecture: x64
+
+            - name: Cache Java dependencies
+              uses: actions/cache@v4
+              with:
+                path: ~/.m2/repository
+                key: ${{ runner.os }}-maven-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                    ${{ runner.os }}-maven-
+            
+            - name: Build Project
+              run: |
+                  mvn --batch-mode clean verify
+                  cp target/*.jar artifacts
+
+            #- name: Unit Test
+            #  run: npm test
+
+            - name: Archive Test Results
+              uses: actions/upload-artifact@v4
+              with:
+                name: Event Test Result
+                path: artifacts/*.jar
+                retention-days: 5
+    code_coverage_job:
+        name: Code Coverage
+        runs-on: self-hosted
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Setup Java
+              uses: actions/setup-java@v5
+              with:
+                java-version: '21'
+                distribution: 'temurin'
+                architecture: x64
+
+            - name: Cache Java dependencies
+              uses: actions/cache@v4
+              with:
+                path: ~/.m2/repository
+                key: ${{ runner.os }}-maven-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                    ${{ runner.os }}-maven-
+
+
+            #- name: Install Dependencies
+            #  run: npm install
+
+            #- name: Run Code Coverage
+            #  run: npm run coverage
+
+            - name: Archive Code Coverage Results
+              uses: actions/upload-artifact@v4
+              with:
+                name: Code Coverage Result
+                path: coverage
+                retention-days: 5
+    verify_unit_test_job:
+        name: Verify Unit Test
+        needs: unit_test_job
+        runs-on: self-hosted
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Download Test Results
+              uses: actions/download-artifact@v4
+              with:
+                name: Event Test Result
+
+            - name: Simple Display Results
+              run: |
+                  cat event-test.xml
     build_job:
         runs-on: self-hosted
         steps:
