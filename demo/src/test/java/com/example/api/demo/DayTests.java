@@ -20,7 +20,7 @@ class DayTests {
     void testState() {
         day.setState("Bearish");
         String expected = "Bearish";
-        String actual = day.getState();
+        String actual = new String(day.getState());
         assertEquals(expected, actual, "Get should be 'Bearish'");
     }
 
