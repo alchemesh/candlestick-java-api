@@ -34,7 +34,7 @@ jobs:
               run: |
                   java -version
                   #run: echo "/usr/share/apache-maven-3.9.6/bin" >> $GITHUB_PATH
-                  mvn clean install
+                  mvn -f demo/pom.xml clean install
                   cp target/*.jar artifacts
 
             #- name: Unit Test
