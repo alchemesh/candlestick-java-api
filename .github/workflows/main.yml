@@ -26,7 +26,7 @@ jobs:
               uses: actions/cache@v4
               with:
                 path: ~/.m2/repository
-                key: ${{ runner.os }}-maven-${{ hashFiles('**/package-lock.json') }}
+                key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
                 restore-keys: |
                     ${{ runner.os }}-maven-
             
@@ -35,10 +35,11 @@ jobs:
                   mvn -f demo/pom.xml clean install
                   mkdir artifacts
                   cp demo/target/*.jar artifacts/
-                  ls demo/target/surefire-reports/
 
             - name: Maven Unit Test
-              run: mvn -f demo/pom.xml test
+              run: |
+                  mvn -f demo/pom.xml test
+                  cp demo/target/surefire-reports/* artifacts/
 
             - name: Archive Test Results
               uses: actions/upload-artifact@v4
@@ -56,7 +57,7 @@ jobs:
             - name: Setup Java
               uses: actions/setup-java@v5
               with:
-                java-version: '21'
+                java-version: '24'
                 distribution: 'temurin'
                 architecture: x64
 
@@ -64,7 +65,7 @@ jobs:
               uses: actions/cache@v4
               with:
                 path: ~/.m2/repository
-                key: ${{ runner.os }}-maven-${{ hashFiles('**/package-lock.json') }}
+                key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
                 restore-keys: |
                     ${{ runner.os }}-maven-
 
@@ -72,8 +73,8 @@ jobs:
             #- name: Install Dependencies
             #  run: npm install
 
-            #- name: Run Code Coverage
-            #  run: npm run coverage
+            - name: Run Code Coverage
+              run: mvn clean verify
 
             - name: Archive Code Coverage Results
               uses: actions/upload-artifact@v4
