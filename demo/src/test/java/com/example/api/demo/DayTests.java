@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class DayTests {
@@ -20,7 +21,7 @@ class DayTests {
     void testState() {
         day.setState("Bearish");
         String expected = "Bearish";
-        String actual = new String(day.getState());
+        String actual = day.getState();
         assertEquals(expected, actual, "Get should be 'Bearish'");
     }
 
