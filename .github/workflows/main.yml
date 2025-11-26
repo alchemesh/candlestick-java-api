@@ -37,7 +37,7 @@ jobs:
                   cp demo/target/*.jar artifacts/
 
             - name: Maven Unit Test
-              run: mvn test
+              run: mvn -f demo/pom.xml test
 
             - name: Archive Test Results
               uses: actions/upload-artifact@v4
