@@ -35,8 +35,9 @@ jobs:
                   java -version
                   #run: echo "/usr/share/apache-maven-3.9.6/bin" >> $GITHUB_PATH
                   mvn -f demo/pom.xml clean install
+                  ls -ltra
                   cp demo/target/*.jar artifacts/
-                  ls artifacts/
+                  #ls artifacts/
 
             #- name: Unit Test
             #  run: npm test
