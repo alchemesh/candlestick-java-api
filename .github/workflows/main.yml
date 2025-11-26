@@ -17,6 +17,11 @@ jobs:
                 distribution: 'temurin'
                 architecture: x64
 
+            #- name: Set up Maven
+            #  uses: stCarolas/setup-maven@v1.5 # Or another suitable Maven setup action
+            #  with:
+            #    maven-version: '3.8.6'
+
             - name: Cache Java dependencies
               uses: actions/cache@v4
               with:
@@ -27,7 +32,9 @@ jobs:
             
             - name: Build Project
               run: |
-                  mvn --batch-mode clean verify
+                  java -version
+                  run: echo "/usr/share/apache-maven-3.9.6/bin" >> $GITHUB_PATH
+                  mvn clean install
                   cp target/*.jar artifacts
 
             #- name: Unit Test
