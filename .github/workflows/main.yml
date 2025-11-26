@@ -32,15 +32,12 @@ jobs:
             
             - name: Build Project
               run: |
-                  java -version
-                  #run: echo "/usr/share/apache-maven-3.9.6/bin" >> $GITHUB_PATH
                   mvn -f demo/pom.xml clean install
                   mkdir artifacts
                   cp demo/target/*.jar artifacts/
-                  ls artifacts/
 
-            #- name: Unit Test
-            #  run: npm test
+            - name: Maven Unit Test
+              run: mvn test
 
             - name: Archive Test Results
               uses: actions/upload-artifact@v4
