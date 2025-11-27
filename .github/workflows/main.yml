@@ -40,12 +40,20 @@ jobs:
               run: |
                   mvn -f demo/pom.xml test
                   cp demo/target/surefire-reports/* artifacts/
+                  cp demo/target/site/jacoco/* coverage/
 
-            - name: Archive Test Results
+            - name: Archive Unit Test Results
               uses: actions/upload-artifact@v4
               with:
                 name: Event Test Result
                 path: artifacts/*
+                retention-days: 5
+                
+            - name: Archive Coverage Test Results
+              uses: actions/upload-artifact@v4
+              with:
+                name: Coverage Test Result
+                path: coverage/*
                 retention-days: 5
     code_coverage_job:
         name: Code Coverage
