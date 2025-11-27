@@ -37,17 +37,17 @@
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.10.0</version> <!-- Or the latest version -->
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.13.4</version> <!-- Or the latest version -->
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>5.10.0</version> <!-- Or the latest version -->
 			<scope>test</scope>
-		</dependency>
-		
+		</dependency>-->
+
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
