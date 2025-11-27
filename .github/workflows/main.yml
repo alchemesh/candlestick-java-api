@@ -76,7 +76,7 @@ jobs:
             - name: Run Code Coverage
               run: |
                   mvn -f demo/pom.xml clean verify
-                  ls demo/targets/sites
+                  ls demo/target/
 
             - name: Archive Code Coverage Results
               uses: actions/upload-artifact@v4
