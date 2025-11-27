@@ -40,7 +40,8 @@ jobs:
               run: |
                   mvn -f demo/pom.xml test
                   cp demo/target/surefire-reports/* artifacts/
-                  cp demo/target/site/jacoco/* coverage/
+                  cp demo/target/site/jacoco/jacoco.xml coverage/
+                  cp demo/target/site/jacoco/index.html coverage/
 
             - name: Archive Unit Test Results
               uses: actions/upload-artifact@v4
