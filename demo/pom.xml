@@ -97,29 +97,32 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.13</version> <!-- Use a recent stable version -->
-				<configuration>
+				<!--<configuration>
 					<includes>
 						<include>**/*.class</include>
 					</includes>
-				</configuration>
+				</configuration>-->
                 <executions>
 					<execution>
                     <id>prepare-agent</id>
                     <goals>
                         <goal>prepare-agent</goal>
                     </goals>
-                    <configuration>
+                    <!--<configuration>
                         <excludes>
                             <excludes>*</excludes>
                         </excludes>
-                    </configuration>
+                    </configuration>-->
                 </execution>
                     <execution>
                         <id>report</id>
-                        <phase>prepare-package</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/target/site</outputDirectory>
+						</configuration>
                     </execution>
                 </executions>
             </plugin>
