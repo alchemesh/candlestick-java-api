@@ -76,7 +76,7 @@ jobs:
             - name: Run Code Coverage
               run: |
                   mvn -f demo/pom.xml clean verify
-                  ls demo/target/
+                  ls demo/target/surefire-reports/
 
             - name: Archive Code Coverage Results
               uses: actions/upload-artifact@v4
