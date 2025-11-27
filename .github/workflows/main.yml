@@ -33,7 +33,7 @@ jobs:
             - name: Build Project
               run: |
                   mvn -f demo/pom.xml clean install
-                  mkdir artifacts
+                  mkdir artifacts && mkdir coverage
                   cp demo/target/*.jar artifacts/
 
             - name: Maven Unit Test
