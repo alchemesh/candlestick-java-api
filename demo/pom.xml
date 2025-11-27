@@ -103,11 +103,17 @@
 					</includes>
 				</configuration>
                 <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
+					<execution>
+                    <id>prepare-agent</id>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                    <configuration>
+                        <excludes>
+                            <excludes>*</excludes>
+                        </excludes>
+                    </configuration>
+                </execution>
                     <execution>
                         <id>report</id>
                         <phase>prepare-package</phase>
