@@ -101,7 +101,7 @@ public class DayDAO {
     }
 
     public void setEvent(Stock stock) {
-        System.out.print(stock.getEvent().getTimestamp());
+        //System.out.print(stock.getEvent().getTimestamp());
 
         Connection conn = null;
         PreparedStatement ps = null;
