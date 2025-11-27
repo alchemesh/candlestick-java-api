@@ -120,9 +120,9 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/target/site</outputDirectory>
-						</configuration>
+						<!--<configuration>
+							<outputDirectory>${project.build.directory}/site</outputDirectory>
+						</configuration>-->
                     </execution>
                 </executions>
             </plugin>
