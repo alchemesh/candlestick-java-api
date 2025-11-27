@@ -38,7 +38,7 @@ jobs:
 
             - name: Maven Unit Test
               run: |
-                  mvn -f demo/pom.xml test
+                  mvn -x -f demo/pom.xml test
                   cp demo/target/surefire-reports/* artifacts/
 
             - name: Archive Test Results
@@ -75,7 +75,7 @@ jobs:
 
             - name: Run Code Coverage
               run: |
-                  mvn -f demo/pom.xml clean verify
+                  mvn -x -f demo/pom.xml clean verify
                   ls demo/target/surefire-reports/
 
             - name: Archive Code Coverage Results
