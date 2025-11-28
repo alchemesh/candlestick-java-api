@@ -13,7 +13,7 @@ import java.net.http.HttpResponse;
 class ApiControllerTests {
 
 	@Test
-    void testAPI throws Exception() {
+    void testAPI() throws Exception {
         HttpClient client = HttpClient.newHttpClient(); // Create an HTTP client
 
         HttpRequest request = HttpRequest.newBuilder()
