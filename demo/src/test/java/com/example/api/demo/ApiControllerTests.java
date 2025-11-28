@@ -23,7 +23,7 @@ class ApiControllerTests {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString()); // Send the request and handle the response body as a String
 
 
-        String expected = "Test Successful"
+        String expected = "Test Successful";
         String actual = response.body();
         assertEquals(expected, actual, "API call should be 'Test Succesful'");
     }
