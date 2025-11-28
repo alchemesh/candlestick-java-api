@@ -17,7 +17,7 @@ class ApiControllerTests {
         HttpClient client = HttpClient.newHttpClient(); // Create an HTTP client
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://www.example.com/api/test")) // Set the target URI
+                .uri(URI.create("http://localhost:8080/api/test")) // Set the target URI
                 .GET() // Specify the HTTP method (GET, POST, PUT, DELETE, etc.)
                 .build(); // Build the request
 
