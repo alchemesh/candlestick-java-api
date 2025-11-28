@@ -13,66 +13,48 @@ jobs:
             - name: Setup Java
               uses: actions/setup-java@v5
               with:
-                java-version: '21'
+                java-version: '24'
                 distribution: 'temurin'
                 architecture: x64
+
+            #- name: Set up Maven
+            #  uses: stCarolas/setup-maven@v1.5 # Or another suitable Maven setup action
+            #  with:
+            #    maven-version: '3.8.6'
 
             - name: Cache Java dependencies
               uses: actions/cache@v4
               with:
                 path: ~/.m2/repository
-                key: ${{ runner.os }}-maven-${{ hashFiles('**/package-lock.json') }}
+                key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
                 restore-keys: |
                     ${{ runner.os }}-maven-
             
             - name: Build Project
               run: |
-                  mvn --batch-mode clean verify
-                  cp target/*.jar artifacts
+                  mvn -f demo/pom.xml clean install
+                  mkdir artifacts && mkdir coverage
+                  cp demo/target/*.jar artifacts/
 
-            #- name: Unit Test
-            #  run: npm test
+            - name: Maven Unit Test
+              run: |
+                  mvn -f demo/pom.xml test
+                  cp demo/target/surefire-reports/* artifacts/
+                  cp demo/target/site/jacoco/jacoco.xml coverage/
+                  cp demo/target/site/jacoco/index.html coverage/
 
-            - name: Archive Test Results
+            - name: Archive Unit Test Results
               uses: actions/upload-artifact@v4
               with:
                 name: Event Test Result
-                path: artifacts/*.jar
+                path: artifacts/*
                 retention-days: 5
-    code_coverage_job:
-        name: Code Coverage
-        runs-on: self-hosted
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v5
-
-            - name: Setup Java
-              uses: actions/setup-java@v5
-              with:
-                java-version: '21'
-                distribution: 'temurin'
-                architecture: x64
-
-            - name: Cache Java dependencies
-              uses: actions/cache@v4
-              with:
-                path: ~/.m2/repository
-                key: ${{ runner.os }}-maven-${{ hashFiles('**/package-lock.json') }}
-                restore-keys: |
-                    ${{ runner.os }}-maven-
-
-
-            #- name: Install Dependencies
-            #  run: npm install
-
-            #- name: Run Code Coverage
-            #  run: npm run coverage
-
-            - name: Archive Code Coverage Results
+                
+            - name: Archive Coverage Test Results
               uses: actions/upload-artifact@v4
               with:
-                name: Code Coverage Result
-                path: coverage
+                name: Coverage Test Result
+                path: coverage/*
                 retention-days: 5
     verify_unit_test_job:
         name: Verify Unit Test
@@ -89,55 +71,60 @@ jobs:
 
             - name: Simple Display Results
               run: |
-                  cat event-test.xml
+                  ls -ltra
     build_image_job:
         name: Docker Containerization
         needs: unit_test_job
-        if: github.ref == 'refs/head/main'
+        #if: github.ref == 'refs/head/main'
         runs-on: self-hosted
         steps:
-            - name: Checkout
-              uses: actions/checkout@v5
-
-            - name: Docker Build
-              run: sudo docker build -t ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest .
+            - name: Download Test Results
+              uses: actions/download-artifact@v4
+              with:
+                name: Event Test Result
 
             - name: Docker Login
-              run: sudo docker login --username=${{ vars.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD}}
+              uses: docker/login-action@v2.2.0
+              with:
+                username: ${{ vars.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD}}
 
-            - name: Docker Publish
-              run: sudo docker push ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
+            - name: Docker Build
+              uses: docker/build-push-action@v4
+              with:
+                context: .
+                push: false
+                tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
 
-            - name: Docker Logout
-              run: sudo docker logout https://docker.io
-    test_image_job:
-        name: Test Docker Image
-        if: github.ref == 'refs/head/main'
-        needs: build_image_job
-        runs-on: self-hosted
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v5
-
-            - name: Run MYSQL DB
-              run: sudo docker run -itd --env=MYSQL_ROOT_PASSWORD=mypassword -p 3306:3306 --name mysql-app ${{ vars.DOCKER_USERNAME }}/${{ vars.MYSQL_DB_NAME }}:latest
-            
-            - name: Run Docker image
-              run: sudo docker run -itd -p 8080:8080 --link mysql-app:mysql-app --name java-api ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
-
-            - name: Test Docker Image
+            - name: Docker Image Testing
               run: |
+                  docker run --name mysql-app -itd \
+                      -p 3306:3306 \
+                      --env=MYSQL_ROOT_PASSWORD=mypassword \
+                      ${{ vars.DOCKER_USERNAME }}/${{ vars.MYSQL_DB_NAME }}:latest
+                  docker run --name java-api -itd \
+                      -p 8080:8080 \
+                      --link mysql-app:mysql-app \
+                      ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
+
                   sleep 60s
                   curl http://localhost:8080/api/test
-
-            - name: Clean Docker Deployments
-              run: |
                   sudo docker stop java-api && sudo docker rm java-api
                   sudo docker stop mysql-app && sudo docker rm mysql-app
+
+            - name: Docker Push
+              uses: docker/build-push-action@v4
+              with:
+                context: .
+                push: true
+                tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
+
+            #- name: Docker Logout
+            #  run: sudo docker logout https://docker.io
     deploy_image_job:
         name: Deploy Docker Image
         if: github.ref == 'refs/head/main'
-        needs: test_image_job
+        needs: build_image_job
         runs-on: self-hosted
         steps:
             - name: Checkout
