@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: candlestick-java-api-service
+  labels:
+    name: candlestick-java-api-service
+    app: candlestick-java-api-app
+  namespace: _{_NAMESPACE_}_
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30010
+      protocol: TCP
+  selector:
+    name: candlestick-java-api-app-pod
+    app: candlestick-java-api-app

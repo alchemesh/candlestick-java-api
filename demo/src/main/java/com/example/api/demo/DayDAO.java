@@ -13,11 +13,19 @@ import java.sql.Statement;
 public class DayDAO {
     private static Days days;
     private Stock stock;
+    private static String mysqlDB;
     // Database credentials
-    private static final String DB_URL = "jdbc:mysql://mysql-app/Stock_Events"; // Database name
-    private static final String USER = "root"; // MySQL username
-    private static final String PASS = "mypassword"; // MySQL password
+    private static String DB_URL; // Database name
+    private static String USER; // MySQL username
+    private static String PASS; // MySQL password
 
+    public DayDAO () {
+        mysqlDB = System.getenv("MYSQL_DB");
+        DB_URL = "jdbc:mysql://" + mysqlDB + "/Stock_Events";
+
+        USER = System.getenv("MYSQL_USER");
+        PASS = System.getenv("MYSQL_PASS");
+    }
 
     // Retrieve all days
     public Days getAllDays(String event_ID) {

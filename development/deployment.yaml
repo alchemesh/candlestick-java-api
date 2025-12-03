@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: candlestick-java-api-app-deploy
+  labels:
+    name: candlestick-java-api-app-deploy
+    app: candlestick-java-api-app
+  namespace: _{_NAMESPACE_}_
+spec:
+  replicas: _{_REPLICAS_}_
+  selector:
+    matchLabels:
+      name: candlestick-java-api-app-pod
+      app: candlestick-java-api-app
+
+  template:
+    metadata:
+      name: candlestick-java-api-app-pod
+      labels:
+        name: candlestick-java-api-app-pod
+        app: candlestick-java-api-app
+    spec:
+      containers:
+        - name: candlestick-java-api-app
+          imagePullPolicy: Always
+          image: _{_IMAGE_}_
+          env:
+            - name: MYSQL_DB
+              value: candlestick-mysql-service
+            - name: MYSQL_USER
+              value: _{_MYSQL_USER_}_
+            - name: MYSQL_PASS
+              value: _{_MYSQL_PASS_}_
+          ports:
+            - containerPort: 8080
+              name: http
