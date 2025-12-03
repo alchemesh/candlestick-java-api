@@ -107,7 +107,7 @@ jobs:
                       --link mysql-app:mysql-app \
                       ${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
 
-                  sleep 60s
+                  sleep 300s
                   curl http://localhost:8080/api/test
                   sudo docker stop java-api && sudo docker rm java-api
                   sudo docker stop mysql-app && sudo docker rm mysql-app
