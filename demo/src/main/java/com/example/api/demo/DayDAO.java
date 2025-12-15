@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Repository
@@ -58,7 +60,7 @@ public class DayDAO {
                 rs = stmt.executeQuery(sql);
                 */
 
-                Day[] stockDays = new Day[5];
+                List<Day> stockDays = new ArrayList<>();
                 String ticker = "";
                 String name = "";
                 String timestamp = "";
@@ -69,7 +71,7 @@ public class DayDAO {
                     ticker = rs.getString("Ticker");
                     name = rs.getString("Ticker_Name");
                     timestamp = rs.getString("Timestamp");
-                    stockDays[i++] = new Day(rs.getString("Day_Date"), rs.getDouble("Day_Open"), rs.getDouble("Day_Close"), rs.getDouble("Day_High"), rs.getDouble("Day_Low"), rs.getDouble("Day_Movement"), rs.getDouble("Day_Direction"), rs.getString("Day_State"), rs.getDouble("Day_PLowerWick"), rs.getDouble("Day_PBody"), rs.getDouble("Day_PUpperWick"));
+                    stockDays.add(new Day(rs.getString("Day_Date"), rs.getDouble("Day_Open"), rs.getDouble("Day_Close"), rs.getDouble("Day_High"), rs.getDouble("Day_Low"), rs.getDouble("Day_Movement"), rs.getDouble("Day_Direction"), rs.getString("Day_State"), rs.getDouble("Day_PLowerWick"), rs.getDouble("Day_PBody"), rs.getDouble("Day_PUpperWick")));
                     
                 }
 
