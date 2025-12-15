@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 
 @Repository
@@ -75,8 +76,9 @@ public class DayDAO {
                     stockDays.add(new Day(rs.getString("Day_Date"), rs.getDouble("Day_Open"), rs.getDouble("Day_Close"), rs.getDouble("Day_High"), rs.getDouble("Day_Low"), rs.getDouble("Day_Movement"), rs.getDouble("Day_Direction"), rs.getString("Day_State"), rs.getDouble("Day_PLowerWick"), rs.getDouble("Day_PBody"), rs.getDouble("Day_PUpperWick")));
                 }
 
+                Day[] arrStockDays = stockDays.toArray(new Day[stockDays.size()]);
                 Event event = new Event(event_ID, ticker, timestamp);
-                this.stock = new Stock(event, name, stockDays);
+                this.stock = new Stock(event, name, arrStockDays);
                 days = new Days();
                 days.getAppData()
                     .add(this.stock);
