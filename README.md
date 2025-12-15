@@ -18,7 +18,7 @@ Deploy the image using Docker, Kubernetes, or any other container orchestration 
 
 ### Environment variables ###
 
-The docker image needs 3 environment variable to function which are used to connect to the MYSQL database
+The docker image needs 3 environment variables to function which are used to connect to the MYSQL database
 - MYSQL_DB
 - MYSQL_USER
 - MYSQL_PASS
