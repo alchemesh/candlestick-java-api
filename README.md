@@ -2,7 +2,7 @@
 
 The Java API for the Candlestick Pattern application.
 
-The API is essential for communication with the database. There are 2 endpoints for pushing data and retieving it. 
+The API is essential for communication with the database. The API is built on Springboot with Tomcat embedded into the image for servlet deployment. Unit testing is done using JUnit, and coverage testing is done with Jacoco. There are 2 endpoints for pushing data and retieving data. 
 
 * /
     - Post endpoint for the event data
@@ -18,11 +18,11 @@ Deploy the image using Docker, Kubernetes, or any other container orchestration 
 
 ### Environment variables ###
 
-The docker images needs 2 environment variable to function
+The docker image needs 3 environment variable to function which are used to connect to the MYSQL database
+- MYSQL_DB
 - MYSQL_USER
 - MYSQL_PASS
 
-These variables are used to connect to the MYSQL database
 
 ### Docker ###
 
@@ -34,7 +34,7 @@ docker build -t [your_image_name] .
 #### Docker Run ####
 Run the image using the environment variables for the MYSQL user and password.
 
-docker run -itd --env=MYSQL_USER=[your_sql_user] --env=MYSQL_PASS=[your_sql_password] -p 8080:8080 --name [your_container_name] [your_image_name]
+docker run -itd --env=MYSQL_DB=[your_sql_db] --env=MYSQL_USER=[your_sql_user] --env=MYSQL_PASS=[your_sql_password] -p 8080:8080 --name [your_container_name] [your_image_name]
 
 Where:
 * your_sql_user = (User name for the MYSQL database)
@@ -48,7 +48,7 @@ Where:
 The Kubernetes files in this repo can be used as a template for deployment.
 
 #### Deployment ####
-The deployment.yaml file will deploy the java api as a replica set with a name and app labels as candlestick-java-api-app-deploy and candlestick-java-api-app respectfully. 
+The deployment.yaml file will deploy the java api as a replica set with a name and app labels as candlestick-java-api-app-deploy and candlestick-java-api-app respectfully. ***Note: The MYSQL_DB environment variable is set to the Kubernetes MYSQL deployment service name which should be deployed as well***
 
 #### Service ####
 The Java API replicaset is deployed as a LoadBalancer service. This can potentially allow for horizontal scaling for the api to balance the load should it ever be necessary. The service name, candlestick-java-api-service, is used by Python backend and NodeJS frontend for communication between pods. For more information about the Python backend or NodeJS frontend, please visit [Python Backend] (https://github.com/alchemesh/candlestick-backend) or [NodeJS Frontend] (https://github.com/alchemesh/candlestick-frontend) repo.
